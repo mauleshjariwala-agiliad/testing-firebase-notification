@@ -1,0 +1,19 @@
+{
+  "name": "fcm-notification-server",
+  "version": "1.0.0",
+  "description": "Node.js API that receives an FCM token and sends a Firebase push notification",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "firebase-admin": "^12.7.0"
+  }
+}
