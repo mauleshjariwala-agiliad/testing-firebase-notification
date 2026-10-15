@@ -20,11 +20,18 @@ function initFirebase() {
   if (getApps().length > 0) {
     return
   }
+  let serviceAccount
+  if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
+    serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON)
+  } else {
   const serviceAccountPath = path.resolve(process.env.FIREBASE_SERVICE_ACCOUNT_PATH || "./serviceAccountKey.json")
   if (!fs.existsSync(serviceAccountPath)) {
     throw new Error(`Service account file not found at ${serviceAccountPath}. See README step 2.`)
   }
-  const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf8"))
+  serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf8"))
+  }
+  // Env vars often store the key with literal "\n" sequences instead of newlines
+  serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, "\n")
   initializeApp({ credential: cert(serviceAccount) })
   console.log(`Firebase Admin initialized for project "${serviceAccount.project_id}"`)
 }
