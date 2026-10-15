@@ -24,6 +24,19 @@ const PORT = process.env.PORT || 4000
  */
 function createApp() {
   const app = express()
+  const corsOptions = {
+    origin: [
+      'https://pushnotification-6f823.web.app',
+      'https://pushnotification-6f823.firebaseapp.com',
+      'http://localhost:3000', // keep for local dev (adjust the port)
+    ],
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  };
+
+  app.use(cors(corsOptions));
+  app.options('*', cors(corsOptions)); // handle preflight requests
+  
   app.use(cors({ origin: CORS_ORIGINS }))
   app.use(express.json())
   app.get("/health", (req, res) => res.json({ status: "ok" }))
