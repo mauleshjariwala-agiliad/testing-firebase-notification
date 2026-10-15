@@ -22,13 +22,17 @@ function initFirebase() {
   }
   let serviceAccount
   if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
+    console.log("Using service account from FIREBASE_SERVICE_ACCOUNT_JSON environment variable", process.env.FIREBASE_SERVICE_ACCOUNT_JSON)
     serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON)
+    console.log("Using JSON service account from FIREBASE_SERVICE_ACCOUNT_JSON environment variable", serviceAccount.project_id)
   } else {
-  const serviceAccountPath = path.resolve(process.env.FIREBASE_SERVICE_ACCOUNT_PATH || "./serviceAccountKey.json")
-  if (!fs.existsSync(serviceAccountPath)) {
-    throw new Error(`Service account file not found at ${serviceAccountPath}. See README step 2.`)
-  }
-  serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf8"))
+    const serviceAccountPath = path.resolve(process.env.FIREBASE_SERVICE_ACCOUNT_PATH || "./serviceAccountKey.json")
+    console.log("Using service account from file", serviceAccountPath)
+    if (!fs.existsSync(serviceAccountPath)) {
+      throw new Error(`Service account file not found at ${serviceAccountPath}. See README step 2.`)
+    }
+    serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf8"))
+    console.log("Using service account from file", serviceAccount.project_id)
   }
   // Env vars often store the key with literal "\n" sequences instead of newlines
   serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, "\n")
